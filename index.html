@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nutritional Information</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
+
+<body>
+  <h1>Healthy living</h1>
+
+  <br>
+  <form id="Nutrition Information">
+    <label for="foodName">ENTER THE NAME OF FOOD ITEM:</label><br>
+    <input type="text" id="foodName" required>
+    <button id="submit"><i class="fa fa-refresh fa-spin"></i> SUBMIT</button>
+  </form>
+  <div id="nutritionOutput"></div>
+  <script>
+    document.getElementById('Nutrition Information').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var foodName = document.getElementById('foodName').value;
+      var nutritionOutput = document.getElementById('nutritionOutput');
+      var apiKey = 'QD135hU505Z0mF2HHuhNDOlXEP0QEsTE0UHOZYo1';
+      var apiUrl = `https://api.api-ninjas.com/v1/nutrition?query=${foodName}`;
+      let apiHeaders = new Headers({
+        "X-Api-Key": apiKey,
+      });
+
+      return fetch(apiUrl, { method: "GET", headers: apiHeaders })
+        .then(response => response.json())
+        .then((data) => {
+          console.log(data[0]);
+          return data[0];
+        })
+        .then(data => {
+          nutritionOutput.innerHTML = `
+          
+<section class="performance-facts">
+  <header class="performance-facts__header">
+    <h1 class="performance-facts__title"><center>${data.name}</center></h1>
+    <p>Serving Size ${data.serving_size_g} g</p>
+  </header>
+  <table class="performance-facts__table">
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <b>Calories:</b>
+          ${data.calories}
+        </th>
+      <tr>
+        <th colspan="2">
+          <b>Fat:</b>
+          ${data.fat_total_g}g
+        </th>
+      <tr>
+        <th colspan="2">
+          <b>Cholesterol:</b>
+          ${data.cholesterol_mg}mg
+        </th>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Sodium:</b>
+          ${data.sodium_mg}mg
+        </th>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Carbohydrates:</b>
+          ${data.carbohydrates_total_g}g
+        </th>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Sugar:</b>
+          ${data.sugar_g}g
+        </th>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Fiber:</b>
+          ${data.fiber_g}g
+        </th>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Potassium:</b>
+          ${data.potassium_mg}mg
+        </th>
+      </tr>
+      <tr class="thick-end">
+        <th colspan="2">
+          <b>Protein:</b>
+          ${data.protein_g}g
+        </th>
+        <td>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>       
+            `;
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          nutritionOutput.textContent = 'No data related to nutrition found';
+          nutritionOutput.color = 'yellow';
+          nutritionOutput.fontweight = 'bold';
+        });
+    });
+  </script>
+</body>
+
+</html>
